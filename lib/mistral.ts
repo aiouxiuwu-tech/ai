@@ -19,11 +19,12 @@ function collectRawText(response: Awaited<ReturnType<Mistral["ocr"]["process"]>>
 
 export async function recognizeWithMistral(
   imageBase64: string,
+  apiKeyOverride?: string,
 ): Promise<TicketResult> {
-  const apiKey = process.env.MISTRAL_API_KEY;
+  const apiKey = apiKeyOverride?.trim() || process.env.MISTRAL_API_KEY;
 
   if (!apiKey) {
-    throw new Error("MISTRAL_API_KEY is not configured");
+    throw new Error("Enter a Mistral API key or configure MISTRAL_API_KEY");
   }
 
   const startedAt = Date.now();

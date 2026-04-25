@@ -3,7 +3,10 @@ import { recognizeWithMistral } from "@/lib/mistral";
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { image?: unknown };
+    const body = (await request.json()) as {
+      image?: unknown;
+      mistralApiKey?: unknown;
+    };
 
     if (typeof body.image !== "string" || body.image.length === 0) {
       return NextResponse.json(
@@ -12,7 +15,9 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await recognizeWithMistral(body.image);
+    const mistralApiKey =
+      typeof body.mistralApiKey === "string" ? body.mistralApiKey : undefined;
+    const result = await recognizeWithMistral(body.image, mistralApiKey);
 
     return NextResponse.json(result);
   } catch (error) {
